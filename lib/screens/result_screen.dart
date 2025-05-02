@@ -34,7 +34,15 @@ class _ResultScreenState extends State<ResultScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Results', style: TextStyle(fontSize: 24, color: Colors.white)),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.account_circle, color: Colors.white),
+            SizedBox(width: 8),
+            Text('Results', style: TextStyle(fontSize: 24, color: Colors.white)),
+          ],
+        ),
         backgroundColor: Colors.blueAccent,
       ),
       body: Container(
@@ -49,6 +57,18 @@ class _ResultScreenState extends State<ResultScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Center(
+              child: CircleAvatar(
+                radius: 40,
+                backgroundColor: passed ? Colors.green[100] : Colors.red[100],
+                child: Icon(
+                  passed ? Icons.emoji_events : Icons.sentiment_dissatisfied,
+                  color: passed ? Colors.green[800] : Colors.red[800],
+                  size: 40,
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
             Text(
               'Exam Results',
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
@@ -93,6 +113,28 @@ class _ResultScreenState extends State<ResultScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
+                    SizedBox(height: 15),
+                    Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: CircularProgressIndicator(
+                              value: correctAnswers / totalQuestions,
+                              strokeWidth: 10,
+                              backgroundColor: Colors.grey[300],
+                              color: passed ? Colors.green : Colors.red,
+                            ),
+                          ),
+                          Text(
+                            '${((correctAnswers / totalQuestions) * 100).toInt()}%',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 10),
                     // Icon for Passed/Failed status
                     Icon(
@@ -108,6 +150,40 @@ class _ResultScreenState extends State<ResultScreen> {
                         value: correctAnswers / totalQuestions,
                         backgroundColor: Colors.grey[300],
                         color: passed ? Colors.green : Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Card(
+                      color: passed ? Colors.lightGreen[100] : Colors.red[50],
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          passed
+                              ? 'Great job! Keep up the good work!'
+                              : 'Don\'t worry! Keep practicing and try again!',
+                          style: TextStyle(
+                            color: passed ? Colors.green[800] : Colors.red[800],
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Card(
+                      color: Colors.blue[50],
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          '“Success is not final, failure is not fatal: it is the courage to continue that counts.”',
+                          style: TextStyle(fontSize: 14, fontStyle: FontStyle.italic, color: Colors.indigo),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ],
@@ -174,6 +250,17 @@ class _ResultScreenState extends State<ResultScreen> {
         },
         backgroundColor: Colors.green,
         child: Icon(Icons.card_giftcard),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Text(
+            'Tap the gift to celebrate!',
+            style: TextStyle(color: Colors.white70, fontSize: 12),
+          ),
+        ),
       ),
     );
   }

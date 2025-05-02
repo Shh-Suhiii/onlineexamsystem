@@ -51,6 +51,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         child: Container(
           height: double.infinity,
           width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.white, Colors.blue[50]!],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -61,11 +68,19 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 FadeTransition(
                   opacity: _logoAnimation,
                   child: Center(
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.blueAccent,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [Colors.blueAccent, Colors.lightBlueAccent],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
                       child: Icon(
-                        Icons.account_circle,
+                        Icons.school,
                         size: 80,
                         color: Colors.white,
                       ),
@@ -91,6 +106,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       Text(
                         'Log in to your account',
                         style: TextStyle(fontSize: 16, color: Colors.blueAccent),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Access your exams and results',
+                        style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                       ),
                     ],
                   ),
@@ -151,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           duration: Duration(milliseconds: 200),
                           curve: Curves.easeInOut,
                           decoration: BoxDecoration(
-                            color: Colors.blueAccent,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: ElevatedButton(
@@ -161,6 +180,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               }
                             },
                             style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white, backgroundColor: Colors.blueAccent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -171,7 +191,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             child: Center(
                               child: Text(
                                 'Login',
-                                style: TextStyle(color: Colors.blue),
                               ),
                             ),
                           ),
@@ -226,6 +245,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               ),
                             ),
                           ],
+                        ),
+                        SizedBox(height: 24),
+                        Text(
+                          '© 2025 Online Exam System',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],
                     ),

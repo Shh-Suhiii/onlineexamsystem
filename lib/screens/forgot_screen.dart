@@ -87,6 +87,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
         child: Container(
           height: double.infinity,
           width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.white, Colors.blue[50]!],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -95,13 +102,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                 // Logo with animation
                 FadeTransition(
                   opacity: _logoAnimation,
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.white,
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [Colors.blueAccent, Colors.lightBlueAccent],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
                     child: Icon(
-                      Icons.lock,
+                      Icons.lock_reset,
                       size: 80,
-                      color: Colors.blueAccent,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -168,12 +183,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                           duration: Duration(milliseconds: 200),
                           curve: Curves.easeInOut,
                           decoration: BoxDecoration(
-                            color: isProcessing ? Colors.grey : Colors.blueAccent,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: ElevatedButton(
                             onPressed: isProcessing ? null : _resetPassword,
                             style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white, backgroundColor: isProcessing ? Colors.grey : Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
                               padding: EdgeInsets.symmetric(vertical: 16),
                               textStyle: TextStyle(fontSize: 18),
                               elevation: 5,
@@ -185,10 +203,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                                       valueColor:
                                           AlwaysStoppedAnimation<Color>(Colors.white),
                                     )
-                                  : Text(
-                                      'Send Reset Link',
-                                      style: TextStyle(color: Colors.blue),
-                                    ),
+                                  : Text('Send Reset Link'),
                             ),
                           ),
                         ),
@@ -203,6 +218,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                             'Back to Login',
                             style: TextStyle(color: Colors.blueAccent),
                           ),
+                        ),
+                        SizedBox(height: 24),
+                        Text(
+                          '© 2025 Online Exam System',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],
                     ),

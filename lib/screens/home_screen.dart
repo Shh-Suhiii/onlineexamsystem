@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'exam_screen.dart';
 import 'result_screen.dart';
 import 'settings_screen.dart';
@@ -75,34 +76,37 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: Stack(
-              children: [
-                Icon(Icons.notifications, size: 28),
-                if (unreadNotifications > 0)
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      height: 12,
-                      width: 12,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '$unreadNotifications',
-                          style: TextStyle(fontSize: 8, color: Colors.white),
+          Tooltip(
+            message: 'Notifications',
+            child: IconButton(
+              icon: Stack(
+                children: [
+                  Icon(Icons.notifications, size: 28),
+                  if (unreadNotifications > 0)
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Container(
+                        height: 12,
+                        width: 12,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$unreadNotifications',
+                            style: TextStyle(fontSize: 8, color: Colors.white),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
+              onPressed: () {
+                _showNotificationPopup(context);
+              },
             ),
-            onPressed: () {
-              _showNotificationPopup(context);
-            },
           ),
         ],
       ),
@@ -112,21 +116,160 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Welcome back, Student!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              // Daily Tip Card
+              Card(
+                color: Colors.amberAccent.withOpacity(0.9),
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.lightbulb_outline, color: Colors.deepOrange),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Tip of the Day: Stay calm and manage your time wisely during exams!',
+                          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
               // Search Bar
               _buildSearchBar(),
               SizedBox(height: 16),
               // Quick Access Section (Latest Exams/Results)
               _buildQuickAccess(),
               SizedBox(height: 16),
+              // Leaderboard Card
+              Card(
+                color: Colors.white.withOpacity(0.9),
+                elevation: 6,
+                shadowColor: Colors.indigoAccent.withOpacity(0.4),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Leaderboard - Top Performers',
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Column(
+                        children: [
+                          _buildLeaderboardTile('Aarav Sharma', '95%'),
+                          _buildLeaderboardTile('Suhani Rai', '92%'),
+                          _buildLeaderboardTile('Priya Patel', '89%'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              // Performance Summary Card
+              Card(
+                color: Colors.white.withOpacity(0.9),
+                elevation: 6,
+                shadowColor: Colors.green.withOpacity(0.3),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Performance Summary',
+                        style: TextStyle(
+                          color: Colors.green[700],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      AspectRatio(
+                        aspectRatio: 1.7,
+                        child: BarChart(
+                          BarChartData(
+                            alignment: BarChartAlignment.spaceAround,
+                            maxY: 100,
+                            barTouchData: BarTouchData(enabled: false),
+                            titlesData: FlTitlesData(
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: true),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (double value, _) {
+                                    final exams = ['Math', 'Physics', 'Chemistry'];
+                                    return Text(exams[value.toInt()]);
+                                  },
+                                ),
+                              ),
+                            ),
+                            borderData: FlBorderData(show: false),
+                            barGroups: [
+                              BarChartGroupData(x: 0, barRods: [
+                                BarChartRodData(toY: 85, color: Colors.lightGreen, width: 20),
+                              ]),
+                              BarChartGroupData(x: 1, barRods: [
+                                BarChartRodData(toY: 78, color: Colors.green, width: 20),
+                              ]),
+                              BarChartGroupData(x: 2, barRods: [
+                                BarChartRodData(toY: 92, color: Colors.teal, width: 20),
+                              ]),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Online Exam System © 2025 • v1.0',
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ),
+              SizedBox(height: 16),
               // Grid View
-              Expanded(
+              Padding(
+                padding: EdgeInsets.only(top: 0),
                 child: GridView.count(
                   crossAxisCount: 2,
                   padding: EdgeInsets.all(16),
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   children: [
                     _buildCard(context, 'Start Exam', Icons.edit, ExamScreen()),
                     _buildCard(context, 'View Results', Icons.score, ResultScreen()),
@@ -134,7 +277,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-            ],
+              SizedBox(height: 32),
+            ],),
           ),
         ),
       ),
@@ -143,6 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Implement action (e.g., add new exam)
         },
         backgroundColor: Colors.blueAccent,
+        tooltip: 'Create New Exam',
         child: Icon(Icons.add),
       ),
     );
@@ -207,6 +352,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Helper for leaderboard tiles
+  Widget _buildLeaderboardTile(String name, String score) {
+    return ListTile(
+      leading: Icon(Icons.emoji_events, color: Colors.orangeAccent),
+      title: Text(name, style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w600)),
+      trailing: Text(score, style: TextStyle(color: Colors.black54)),
+    );
+  }
+
   // Search Bar Widget
   Widget _buildSearchBar() {
     return Container(
@@ -267,11 +421,13 @@ class AnimatedFloatingActionButton extends StatefulWidget {
   final VoidCallback onPressed;
   final Color backgroundColor;
   final Widget child;
+  final String? tooltip;
 
   const AnimatedFloatingActionButton({
     required this.onPressed,
     required this.backgroundColor,
     required this.child,
+    this.tooltip,
     Key? key,
   }) : super(key: key);
 
@@ -300,7 +456,7 @@ class _AnimatedFloatingActionButtonState extends State<AnimatedFloatingActionBut
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
+    Widget fab = ScaleTransition(
       scale: _scaleAnimation,
       child: FloatingActionButton(
         onPressed: () {
@@ -313,5 +469,14 @@ class _AnimatedFloatingActionButtonState extends State<AnimatedFloatingActionBut
         child: widget.child,
       ),
     );
+
+    if (widget.tooltip != null) {
+      return Tooltip(
+        message: widget.tooltip!,
+        child: fab,
+      );
+    } else {
+      return fab;
+    }
   }
 }
